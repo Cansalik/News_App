@@ -16,10 +16,14 @@ class AllNews extends StatefulWidget {
 }
 
 class _AllNewsState extends State<AllNews> {
+  bool _isSearch = false;
+  String searchWord = "";
 
   bool _loading = true;
   List<BreakingModel> sliders =[];
   List<NewsModel> articles  = [];
+  List<BreakingModel> filteredSliders = [];
+  List<NewsModel> filteredArticles = [];
 
   @override
   void initState() {
@@ -47,32 +51,85 @@ class _AllNewsState extends State<AllNews> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isSearch) {
+      filteredSliders = sliders
+          .where((slider) =>
+          slider.title!.toLowerCase().contains(searchWord.toLowerCase()))
+          .toList();
+      filteredArticles = articles
+          .where((article) =>
+          article.title!.toLowerCase().contains(searchWord.toLowerCase()))
+          .toList();
+    } else {
+      filteredSliders = sliders;
+      filteredArticles = articles;
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(widget.news + ' News',style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),),
-          ],
-        ),
-        centerTitle: true,
-        elevation: 0.0,
+        automaticallyImplyLeading: false,
+        title: _isSearch ?
+        TextField(
+          decoration: InputDecoration(
+            labelStyle: TextStyle(color: Colors.blue,decoration: TextDecoration.underline),
+            labelText: "Search Word",
+          ),
+          onChanged: (searchResult)
+          {
+            setState(() {
+              searchWord = searchResult;
+            });
+          },
+        )
+            : Text(widget.news + ' News',style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),),
+        actions: [
+          _isSearch ?
+          IconButton(
+            icon: Icon(Icons.cancel,color: Colors.blue,),
+            onPressed: ()
+            {
+              setState(() {
+                _isSearch = false;
+                searchWord = "";
+              });
+            },
+          )
+              : IconButton(
+            icon: Icon(Icons.search,color: Colors.blue,),
+            onPressed: ()
+            {
+              setState(() {
+                _isSearch = true;
+              });
+            },
+          ),
+        ],
       ),
       body: Container(
         margin: EdgeInsets.symmetric(horizontal: 10),
-        child:ListView.builder(
-            shrinkWrap: true,
-            physics: ClampingScrollPhysics(),
-            itemCount: widget.news == 'Breaking' ? sliders.length : articles.length,
-            itemBuilder: (context, index)
-            {
-              return NewsList(
-                  image: widget.news == 'Breaking' ? sliders[index].urlToImage! : articles[index].urlToImage!,
-                  description: widget.news == 'Breaking' ? sliders[index].description! : articles[index].description!,
-                  title:widget.news == 'Breaking' ? sliders[index].title! : articles[index].title!,
-                  blogUrl: widget.news == 'Breaking' ? sliders[index].url! : articles[index].url!,
-              );
-            }),
+        child: ListView.builder(
+          shrinkWrap: true,
+          physics: ClampingScrollPhysics(),
+          itemCount: widget.news == 'Breaking'
+              ? filteredSliders.length
+              : filteredArticles.length,
+          itemBuilder: (context, index) {
+            return NewsList(
+              image: widget.news == 'Breaking'
+                  ? filteredSliders[index].urlToImage!
+                  : filteredArticles[index].urlToImage!,
+              description: widget.news == 'Breaking'
+                  ? filteredSliders[index].description!
+                  : filteredArticles[index].description!,
+              title: widget.news == 'Breaking'
+                  ? filteredSliders[index].title!
+                  : filteredArticles[index].title!,
+              blogUrl: widget.news == 'Breaking'
+                  ? filteredSliders[index].url!
+                  : filteredArticles[index].url!,
+            );
+          },
+        ),
       ),
     );
   }

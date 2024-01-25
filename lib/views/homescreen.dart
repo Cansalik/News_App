@@ -258,7 +258,7 @@ class TrendingNews extends StatelessWidget {
                   Column(
                     children: [
                       Container(
-                        width: MediaQuery.of(context).size.width/1.7,
+                        width: MediaQuery.of(context).size.width/1.9,
                         child: Text(title,
                           maxLines: 2,
                           style: const TextStyle(
@@ -270,7 +270,7 @@ class TrendingNews extends StatelessWidget {
                       ),
                       SizedBox(height: 5,),
                       Container(
-                        width: MediaQuery.of(context).size.width/1.7,
+                        width: MediaQuery.of(context).size.width/1.9,
                         child: Text(description,
                           maxLines: 3,
                           style: const TextStyle(
