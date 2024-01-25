@@ -27,7 +27,8 @@ class News
               element['description'],
               element['url'],
               element['urlToImage'],
-              element['content']
+              element['content'],
+              element['publishedAt']
           );
           news.add(newsModel);
         }

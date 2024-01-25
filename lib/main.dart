@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import 'package:news_app/views/homescreen.dart';
 import 'package:news_app/views/landingpage.dart';
 
 void main() {
@@ -18,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
       ),
-      home: HomePage(),
+      home: LandingPage(),
     );
   }
 }

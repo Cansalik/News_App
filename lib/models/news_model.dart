@@ -6,6 +6,7 @@ class NewsModel
    String? url;
    String? urlToImage;
    String? content;
+   String? publishedAt;
 
-  NewsModel(this.author, this.title, this.description, this.url, this.urlToImage, this.content);
+  NewsModel(this.author, this.title, this.description, this.url, this.urlToImage, this.content, this.publishedAt);
 }

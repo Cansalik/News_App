@@ -25,7 +25,8 @@ class BreakingNews
               element['description'],
               element['url'],
               element['urlToImage'],
-              element['content']
+              element['content'],
+              element['publishedAt']
           );
           breakingList.add(breakingModel);
         }

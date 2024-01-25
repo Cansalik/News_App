@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../models/breakingnews_model.dart';
 import '../models/news_model.dart';
@@ -18,8 +19,8 @@ class AllNews extends StatefulWidget {
 class _AllNewsState extends State<AllNews> {
   bool _isSearch = false;
   String searchWord = "";
-
   bool _loading = true;
+
   List<BreakingModel> sliders =[];
   List<NewsModel> articles  = [];
   List<BreakingModel> filteredSliders = [];
@@ -56,15 +57,22 @@ class _AllNewsState extends State<AllNews> {
           .where((slider) =>
           slider.title!.toLowerCase().contains(searchWord.toLowerCase()))
           .toList();
+      filteredSliders = sliders
+          .where((slider) =>
+          slider.description!.toLowerCase().contains(searchWord.toLowerCase()))
+          .toList();
       filteredArticles = articles
           .where((article) =>
           article.title!.toLowerCase().contains(searchWord.toLowerCase()))
+          .toList();
+      filteredArticles = articles
+          .where((article) =>
+          article.description!.toLowerCase().contains(searchWord.toLowerCase()))
           .toList();
     } else {
       filteredSliders = sliders;
       filteredArticles = articles;
     }
-
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -127,6 +135,9 @@ class _AllNewsState extends State<AllNews> {
               blogUrl: widget.news == 'Breaking'
                   ? filteredSliders[index].url!
                   : filteredArticles[index].url!,
+              date: widget.news == 'Breaking'
+                  ? filteredSliders[index].publishedAt!
+                  : filteredArticles[index].publishedAt!,
             );
           },
         ),
@@ -138,8 +149,8 @@ class _AllNewsState extends State<AllNews> {
 
 class NewsList extends StatelessWidget {
 
-  String image, description, title, blogUrl;
-  NewsList({required this.image, required this.description, required this.title, required this.blogUrl});
+  String image, description, title, blogUrl, date;
+  NewsList({required this.image, required this.description, required this.title, required this.blogUrl, required this.date});
 
   @override
   Widget build(BuildContext context) {
@@ -150,6 +161,7 @@ class NewsList extends StatelessWidget {
       },
       child: Container(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
                 borderRadius: BorderRadius.circular(10),
@@ -160,14 +172,26 @@ class NewsList extends StatelessWidget {
                   fit: BoxFit.cover,)
             ),
             SizedBox(height: 5,),
-            Text(
-              title,
+            RichText(
               maxLines: 2,
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold
+              text: TextSpan(
+                text: "$title - ",
+                style: TextStyle(
+                  color: Colors.black, // Set title color to black
+                  fontWeight: FontWeight.bold,
+                ),
+                children: [
+                  TextSpan(
+                    text: DateFormat('dd.MM.yyyy').format(DateTime.parse(date)),
+                    style: TextStyle(
+                      color: Colors.blue, // Set date color to blue
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
             ),
+            SizedBox(height: 5,),
             Padding(
               padding: const EdgeInsets.only(bottom: 20.0),
               child: Text(

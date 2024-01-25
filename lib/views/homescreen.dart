@@ -120,7 +120,8 @@ class _HomePageState extends State<HomePage> {
               {
                 late String image = sliders[index].urlToImage!;
                 late String name = sliders[index].title!;
-                return buildSlider(image, index, name);
+                late String blogUrl = sliders[index].url!;
+                return buildSlider(image, index, name, blogUrl);
               }, options: CarouselOptions(
                   height: 250,
                   autoPlay: true,
@@ -188,30 +189,36 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-  Widget buildSlider(String image, int index, String name) => Container(
+  Widget buildSlider(String image, int index, String name, String blogUrl) => Container(
     margin: const EdgeInsets.symmetric(horizontal: 5.0),
-    child: Stack(
-      children: [
-        ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: CachedNetworkImage(
-              imageUrl: image,
-              height: 250,
-              fit: BoxFit.cover,
-              width: MediaQuery.of(context).size.width,)
-        ),
-        Container(
-          height: 250,
-          padding: EdgeInsets.only(left: 10),
-          child: Text(name, style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),),
-          decoration: const BoxDecoration(
-            color: Colors.black26,
-            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10))
+    child: GestureDetector(
+      onTap: ()
+      {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => NewsDetail(newsUrl: blogUrl)));
+      },
+      child: Stack(
+        children: [
+          ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: CachedNetworkImage(
+                imageUrl: image,
+                height: 250,
+                fit: BoxFit.cover,
+                width: MediaQuery.of(context).size.width,)
           ),
-          margin: const EdgeInsets.only(top: 170),
-          width: MediaQuery.of(context).size.width,
-        ),
-      ],
+          Container(
+            height: 250,
+            padding: EdgeInsets.only(left: 10),
+            child: Text(name, style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),),
+            decoration: const BoxDecoration(
+              color: Colors.black26,
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10))
+            ),
+            margin: const EdgeInsets.only(top: 170),
+            width: MediaQuery.of(context).size.width,
+          ),
+        ],
+      ),
     ),
   );
   Widget indicator() => AnimatedSmoothIndicator(
