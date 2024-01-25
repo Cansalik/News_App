@@ -3,7 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app/models/news_model.dart';
 import 'package:news_app/models/breakingnews_model.dart';
-import 'package:news_app/services/data.dart';
+import 'package:news_app/services/categories.dart';
 import 'package:news_app/services/news.dart';
 import 'package:news_app/services/breaking.dart';
 import 'package:news_app/views/allnewspage.dart';
